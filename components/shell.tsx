@@ -59,7 +59,7 @@ export function FloatingNav() {
   useEffect(() => { document.documentElement.dataset.theme = navyMode ? "navy" : "cream"; }, [navyMode]);
   return (
     <header className={cn("floating-nav glass", hidden && "floating-nav--hidden")}>
-      <Link className="brand" href="/" aria-label="MR!JK! home"><Sparkle /> <span>MR!JK!</span></Link><span className="flag-count mono" aria-label="Hidden evidence flags found">FLAGS <b id="flag-count">0/4</b></span>
+      <Link className="brand" href="/" aria-label="MR!JK! home"><Sparkle /> <span>MR!JK!</span></Link>
       <nav className={cn("nav-links", open && "nav-links--open")} aria-label="Primary navigation">
         {links.map((link) => <Link key={link.id} href={link.href} aria-current={active === link.id ? "location" : undefined} onClick={() => setOpen(false)}>{link.label}</Link>)}
         <Link href="/memories" onClick={() => setOpen(false)}>Memories</Link>
