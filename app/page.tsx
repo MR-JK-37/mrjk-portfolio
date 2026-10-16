@@ -1,4 +1,5 @@
-import { About, Contact, Footer, Hero, Proof, Toolkit, Work } from "@/components/home";
+import { About, Contact, Footer, Proof, Toolkit, Work } from "@/components/home";
+import { Hero } from "@/components/hero";
 import { site } from "@/lib/site";
 
 export default function HomePage() {
