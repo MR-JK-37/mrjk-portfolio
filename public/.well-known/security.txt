@@ -1,0 +1,6 @@
+Contact: https://www.linkedin.com/in/jaikiran-e-mr1jk1/
+Canonical: http://localhost:3000/.well-known/security.txt
+Policy: http://localhost:3000/security
+Preferred-Languages: en
+Expires: 2027-10-16T00:00:00.000Z
+# Evidence marker: MRJK{WELL_KNOWN_PATH}

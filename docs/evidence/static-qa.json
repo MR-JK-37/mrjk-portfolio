@@ -1,0 +1,166 @@
+{
+  "pages": {
+    "home": {
+      "serious_or_critical": [
+        {
+          "id": "scrollable-region-focusable",
+          "nodes": 1
+        }
+      ],
+      "headings": [
+        "I trace the gap.Then build the fix.",
+        "Five systems.Five different failure surfaces.",
+        "AERO",
+        "SPEAR-AI",
+        "NetPulse",
+        "Lucent",
+        "Journey Safety",
+        "Built under a clock.Recorded without mythology.",
+        "ARAN",
+        "Digital Evidence Integrity System",
+        "SPEAR-Credit",
+        "Skills with a case number.",
+        "Offensive",
+        "Defensive / Forensics",
+        "Network",
+        "AI / ML",
+        "Development",
+        "Specific about the work.Careful about the claim.",
+        "Bring context.I\u2019ll bring a threat model."
+      ],
+      "landmarks": 5
+    },
+    "design-system": {
+      "serious_or_critical": [],
+      "headings": [
+        "Quiet glass. Sharp intent.",
+        "Palette",
+        "Buttons & states",
+        "Inputs",
+        "Tabs, badges & cards",
+        "Evidence card",
+        "Modal"
+      ],
+      "landmarks": 6
+    },
+    "security": {
+      "serious_or_critical": [],
+      "headings": [
+        "The portfolio is part of the proof.",
+        "Protect visitors, admin access and uploaded media.",
+        "Browser boundary",
+        "Admin authentication",
+        "Input handling",
+        "Media uploads",
+        "Dependency policy",
+        "Operational limits",
+        "Testable, not theatrical."
+      ],
+      "landmarks": 6
+    },
+    "resume": {
+      "serious_or_critical": [],
+      "headings": [
+        "Jaikiran E",
+        "Profile",
+        "Education",
+        "Third-year B.E. Computer Science and Engineering (Cyber Security)",
+        "Selected projects",
+        "AERO",
+        "SPEAR-AI",
+        "NetPulse",
+        "Lucent",
+        "Journey Safety",
+        "Hackathons",
+        "ARAN \u2014 MSME Hackathon 6.0",
+        "Digital Evidence Integrity System \u2014 PecHacks 4.0",
+        "SPEAR-Credit \u2014 NABARD Hackathon \u00b7 Global Fintech Fest",
+        "Capabilities"
+      ],
+      "landmarks": 5
+    },
+    "work-aero": {
+      "serious_or_critical": [],
+      "headings": [
+        "AERO",
+        "Make voice assistance private and resilient without assuming cloud access.",
+        "A small number of explicit boundaries.",
+        "Stack",
+        "Trust is made visible.",
+        "Current state",
+        "What I would improve next"
+      ],
+      "landmarks": 7
+    },
+    "work-spear-ai": {
+      "serious_or_critical": [],
+      "headings": [
+        "SPEAR-AI",
+        "Turn local models into a usable workspace without making private context leave the machine.",
+        "A small number of explicit boundaries.",
+        "Stack",
+        "Trust is made visible.",
+        "Current state",
+        "What I would improve next"
+      ],
+      "landmarks": 7
+    },
+    "work-netpulse": {
+      "serious_or_critical": [],
+      "headings": [
+        "NetPulse",
+        "Help an operator understand live traffic without turning the interface into a wall of charts.",
+        "A small number of explicit boundaries.",
+        "Stack",
+        "Trust is made visible.",
+        "Current state",
+        "What I would improve next"
+      ],
+      "landmarks": 7
+    },
+    "work-lucent": {
+      "serious_or_critical": [],
+      "headings": [
+        "Lucent",
+        "Make small-scope security checks reproducible, understandable and safe to operate.",
+        "A small number of explicit boundaries.",
+        "Stack",
+        "Trust is made visible.",
+        "Current state",
+        "What I would improve next"
+      ],
+      "landmarks": 7
+    },
+    "work-journey-safety": {
+      "serious_or_critical": [],
+      "headings": [
+        "Journey Safety",
+        "Share a journey with trusted people without creating permanent or ambiguous location access.",
+        "A small number of explicit boundaries.",
+        "Stack",
+        "Trust is made visible.",
+        "Current state",
+        "What I would improve next"
+      ],
+      "landmarks": 7
+    }
+  },
+  "preference_modes": {
+    "reduced-motion": {
+      "body_background": "rgb(248, 240, 229)",
+      "glass_background": "rgba(248, 240, 229, 0.9)"
+    },
+    "reduced-transparency": {
+      "body_background": "rgb(248, 240, 229)",
+      "glass_background": "rgba(248, 240, 229, 0.9)"
+    },
+    "more-contrast": {
+      "body_background": "rgb(248, 240, 229)",
+      "glass_background": "rgba(248, 240, 229, 0.9)"
+    },
+    "forced-colors": {
+      "body_background": "rgb(255, 255, 255)",
+      "glass_background": "rgba(255, 255, 255, 0.9)"
+    }
+  }
+}
