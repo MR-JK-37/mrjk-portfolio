@@ -18,13 +18,13 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: ["/opengraph-image"] },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, colorScheme: "light dark", themeColor: "#F8F0E5" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, colorScheme: "dark light", themeColor: "#051538" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const person = { "@context": "https://schema.org", "@type": "Person", name: "MR!JK!", jobTitle: "Cyber Security Student", description: site.description };
   return (
-    <html lang="en" className={`${fraunces.variable} ${uiSans.variable} ${jetbrains.variable}`}>
-      <body>
+    <html lang="en" suppressHydrationWarning className={`${fraunces.variable} ${uiSans.variable} ${jetbrains.variable}`}>
+      <body suppressHydrationWarning>
         <a className="skip-link" href="#main">Skip to content</a>
         <ToastProvider>
           <MotionRuntime />

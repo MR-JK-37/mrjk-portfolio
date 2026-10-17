@@ -1,30 +1,139 @@
+/**
+ * Case-study content for /work/[slug] — sourced directly from resume
+ * (Jaikiran_E_Resume.docx) and LinkedIn posts, Oct 2026. No invented projects.
+ */
 export type ProjectStatus = "SHIPPED" | "IN PROGRESS" | "PROTOTYPE";
 export type ProjectCategory = "Security" | "AI" | "Mobile" | "Web";
-export type Project = { slug:string; caseNumber:string; name:string; classification:string; status:ProjectStatus; summary:string; categories:ProjectCategory[]; year?:string; role:string; problem:string; constraints:string[]; architecture:string[]; stack:string[]; security:string[]; outcome:string; improve:string; failure?:string; links?:{label:string;href:string}[] };
+export type Project = { slug:string; caseNumber:string; name:string; classification:string; status:ProjectStatus; summary:string; categories:ProjectCategory[]; year?:string; role:string; problem:string; constraints:string[]; architecture:string[]; stack:string[]; security:string[]; outcome:string; improve:string; links?:{label:string;href:string}[] };
 
 export const projects: Project[] = [
- { slug:"aero",caseNumber:"001",name:"AERO",classification:"LOCAL / ASSISTIVE AI",status:"IN PROGRESS",summary:"A local-first voice assistant designed to remain useful when the network disappears.",categories:["AI","Mobile"],year:"2026",role:"Product design and Android engineering",problem:"Make voice assistance private and resilient without assuming cloud access.",constraints:["Offline-first operation","Mobile compute and battery limits","Private local data"],architecture:["Voice input","On-device intent layer","Local action router","Private response"],stack:["Kotlin","Jetpack Compose","On-device AI","Android"],security:["Local processing by default","Explicit permission boundaries","No silent cloud fallback"],outcome:"An active build focused on useful offline interaction and visible data boundaries.",improve:"Benchmark latency across a documented device matrix and publish a reproducible privacy evaluation." },
- { slug:"spear-ai",caseNumber:"002",name:"SPEAR-AI",classification:"LOCAL / AI WORKSPACE",status:"IN PROGRESS",summary:"A desktop AI workspace focused on local control, explainable workflows and private context.",categories:["AI","Security"],year:"2026",role:"Architecture, interface design and implementation",problem:"Turn local models into a usable workspace without making private context leave the machine.",constraints:["Variable local hardware","Model latency","Transparent data boundaries"],architecture:["Desktop shell","Local model runtime","Tool boundary","Auditable output"],stack:["Local LLMs","Desktop UI","TypeScript","Python"],security:["Least-privilege tools","Local storage","Visible execution boundaries"],outcome:"A working project organized around local execution and explicit tool boundaries.",improve:"Add signed model manifests and a repeatable prompt-injection test suite." },
- { slug:"netpulse",caseNumber:"003",name:"NetPulse",classification:"DEFENSIVE / NETWORK",status:"PROTOTYPE",summary:"A calm operational view of live network behavior, designed to make anomalies legible.",categories:["Security","Web"],year:"2026",role:"Security research and full-stack engineering",problem:"Help an operator understand live traffic without turning the interface into a wall of charts.",constraints:["High-volume events","Real-time updates","Signal-to-noise control"],architecture:["Packet source","Normalizer","Detection rules","Operator dashboard"],stack:["Networking","Detection engineering","WebSockets","Web UI"],security:["Read-only monitoring path","Bounded event payloads","Defensive output encoding"],outcome:"A project implementation for exploring live traffic and explicit anomaly states.",improve:"Evaluate detection quality against labelled capture sets and publish false-positive rates." },
- { slug:"lucent",caseNumber:"004",name:"Lucent",classification:"OFFENSIVE / VALIDATION",status:"PROTOTYPE",summary:"A compact vulnerability scanner that favors clear evidence over dramatic severity labels.",categories:["Security"],year:"2026",role:"Security engineering and product design",problem:"Make small-scope security checks reproducible, understandable and safe to operate.",constraints:["Authorized targets only","False-positive risk","Actionable reporting"],architecture:["Target allow-list","Probe runner","Evidence normalizer","Finding report"],stack:["Python","HTTP","Security testing","Reporting"],security:["Explicit scope controls","Rate-limited probes","Evidence-first findings"],outcome:"A small scanner concept centered on reproducible evidence.",improve:"Add deterministic fixtures and signed report exports." },
- { slug:"journey-safety",caseNumber:"005",name:"Journey Safety",classification:"SAFETY / MOBILE",status:"PROTOTYPE",summary:"A real-time journey-sharing experience built around consent, clarity and graceful failure.",categories:["Mobile","Web"],year:"2026",role:"Product design and application engineering",problem:"Share a journey with trusted people without creating permanent or ambiguous location access.",constraints:["Sensitive location data","Intermittent connectivity","Urgent interactions"],architecture:["Consent screen","Ephemeral session","Trusted viewer","Expiry"],stack:["Mobile","Real-time data","Maps","Web"],security:["Time-bounded sharing","Revocable access","Minimal retention"],outcome:"A working concept for consent-led, time-bounded journey sharing.",improve:"Threat-model coercion scenarios and test poor-connectivity fallbacks on physical devices." }
+  {
+    slug: "we-care",
+    caseNumber: "001",
+    name: "WE care",
+    classification: "AI / DEMENTIA & ELDERLY CARE",
+    status: "PROTOTYPE",
+    summary: "Voice-first, caregiver-supervised AI companion for dementia and elderly care.",
+    categories: ["AI", "Mobile", "Web"],
+    year: "2026",
+    role: "Android app + Next.js web dashboard, UX design, team of 4",
+    problem: "The team's problem statement — revealed on-site at DRESTEIN '26 — was to design a voice-first, stage-adaptive AI companion for dementia patients that caregivers could actually trust and supervise.",
+    constraints: [
+      "AI must not invent facts about the patient — memory has to be caregiver-verified",
+      "Caregivers need real-time visibility and the ability to escalate",
+      "Consent and access control across patient/caregiver roles",
+    ],
+    architecture: [
+      "Stage-adaptive voice companion (Android, Jetpack Compose, MVVM, Hilt)",
+      "Distress risk scoring (Green / Amber / Red) with human-in-the-loop escalation",
+      "Real-time caregiver alerts via Supabase Realtime and Firebase Cloud Messaging",
+      "Next.js + React web dashboard for caregivers",
+    ],
+    stack: ["Kotlin", "Jetpack Compose", "MVVM", "Hilt", "Next.js", "React", "Supabase", "Firebase"],
+    security: [
+      "Caregiver-verified memory prevents AI-invented facts",
+      "Explicit consent workflows",
+      "Role-based access via PostgreSQL row-level security (RLS)",
+    ],
+    outcome: "1st Prize, ₹1,00,000 — DRESTEIN '26 (Saveetha Engineering College). Took the idea from R&D to a working Android and web prototype in two days.",
+    improve: "The team intends to keep developing it toward a production-ready product rather than stopping at the hackathon prototype.",
+  },
+  {
+    slug: "netpulse",
+    caseNumber: "002",
+    name: "NetPulse",
+    classification: "SECURITY / NETWORK MONITORING",
+    status: "SHIPPED",
+    summary: "Real-time network traffic monitor with passive device discovery and OS fingerprinting.",
+    categories: ["Security", "Web"],
+    year: "2026",
+    role: "Full-stack development and detection logic",
+    problem: "Give an operator a live, legible view of what's actually on their network — including devices that were never explicitly registered.",
+    constraints: [
+      "Real-time updates without overwhelming the operator",
+      "Passive discovery first, active scanning only as a fallback",
+    ],
+    architecture: [
+      "WebSocket-based live dashboard for connection analytics",
+      "Passive ARP-sniffing device discovery with unknown-device flagging",
+      "Passive OS fingerprinting (TTL, TCP window, MAC OUI, port analysis) with confidence scores",
+      "Background active scans: hostname resolution, TCP port probing, ICMP",
+    ],
+    stack: ["React", "Python", "FastAPI", "WebSockets", "Network packet analysis"],
+    security: [
+      "Discovery defaults to passive, read-only capture",
+      "Confidence-scored fingerprinting rather than unqualified claims",
+    ],
+    outcome: "Validated with 6 documented test cases, all passed.",
+    improve: "Broaden protocol coverage and device-fingerprint confidence scoring over time.",
+    links: [{ label: "Source on GitHub", href: "https://github.com/MR-JK-37/netpulse" }],
+  },
+  {
+    slug: "aran",
+    caseNumber: "003",
+    name: "ARAN",
+    classification: "EDGE AI / PREDICTIVE MAINTENANCE",
+    status: "PROTOTYPE",
+    summary: "Edge-AI predictive maintenance for MSMEs, built at MSME Hackathon 6.0.",
+    categories: ["AI"],
+    year: "2026",
+    role: "ML pipeline, sensor integration and edge deployment",
+    problem: "Most MSMEs can't afford predictive maintenance — cloud-based industrial IoT platforms are too expensive per machine. Build something that works at roughly ₹3,000 per machine.",
+    constraints: [
+      "Low per-machine cost (~₹3,000)",
+      "All processing local — no cloud dependency",
+      "Alerts need to be plain-language, not raw sensor data",
+    ],
+    architecture: [
+      "Temperature, vibration, fan RPM and current sensors (DS18B20, ADXL345, SCT-013) per machine",
+      "Raspberry Pi gateway processing all data locally",
+      "Per-machine baseline learning: z-score, moving average and Isolation Forest anomaly detection",
+      "0–100 health score with plain-language alerts",
+    ],
+    stack: ["Python", "Scikit-Learn", "SQLite", "Raspberry Pi", "IoT sensors"],
+    security: ["All sensor data stays on-device — nothing leaves the local gateway"],
+    outcome: "Working prototype at MSME Hackathon 6.0; only flags machines that actually need servicing instead of blanket maintenance schedules.",
+    improve: "Expand the baseline-learning window and validate health scores against real failure data over a longer deployment.",
+  },
 ];
 
 export type Hackathon={year:string;name:string;team?:string;project:string;detail:string;decisions:string[];lesson:string;result?:string};
 export const hackathons:Hackathon[]=[
- {year:"2026",name:"MSME Hackathon 6.0",project:"ARAN",detail:"A passive AI-powered IDS for MSME shop floors, running locally on a Raspberry Pi SPAN port and decoding Modbus TCP, OPC-UA and MQTT.",decisions:["Passive capture","Fully local processing","Industrial protocol awareness"],lesson:"Detection for a shop floor has to respect constrained hardware and operational continuity."},
- {year:"2026",name:"PecHacks 4.0",team:"SudoShift",project:"Digital Evidence Integrity System",detail:"A system for making evidence integrity and chain-of-custody state legible.",decisions:["Hash-linked records","Visible custody transitions","Tamper indication"],lesson:"Integrity controls only help when an investigator can understand their state."},
- {year:"2026",name:"NABARD Hackathon · Global Fintech Fest",project:"SPEAR-Credit",detail:"AI cash-flow prediction and risk flagging for rural micro-enterprises, with bank and enterprise portals and an original CIBIL-style risk scoring engine.",decisions:["Dual-role portals","Cash-flow signals","Explainable risk flags"],lesson:"Financial risk interfaces need reasons, not just a score."}
+ {year:"2026",name:"DRESTEIN '26",team:"Team of 4",project:"WE care",detail:"Voice-first, stage-adaptive AI companion for dementia patients, revealed as the problem statement on-site.",decisions:["Caregiver-verified memory, not AI-invented facts","Human-in-the-loop escalation","Consent-based role access"],lesson:"Research before building — the team spent real time on R&D before writing code, which shaped the whole architecture.",result:"1st Prize, ₹1,00,000"},
+ {year:"2026",name:"MEGATHON: Fusion for Future",team:"Team CryptX",project:"—",detail:"Hackathon win as part of Team CryptX, III Year CSE (Cyber Security), RMKCET.",decisions:[],lesson:"Teamwork across a 4-person team under time pressure.",result:"1st Prize, ₹1,00,000"},
+ {year:"2026",name:"MSME Hackathon 6.0",project:"ARAN",detail:"Edge-AI predictive maintenance for MSME shop floors running fully on a local Raspberry Pi gateway.",decisions:["Local-only processing","Low per-machine hardware cost","Plain-language health scoring"],lesson:"Detection for a shop floor has to respect constrained hardware and keep costs low enough for an MSME to actually adopt it."},
 ];
+
+export {profile} from "@/content/profile";
+
 export const skillGroups=[
- {name:"Offensive",items:["Web testing","Reconnaissance","Vulnerability analysis"],project:"Lucent",slug:"lucent"},
- {name:"Defensive / Forensics",items:["Evidence integrity","Detection thinking","Incident context"],project:"Digital Evidence Integrity System"},
- {name:"Network",items:["Traffic analysis","Monitoring","Protocol fundamentals"],project:"NetPulse",slug:"netpulse"},
- {name:"AI / ML",items:["Local LLMs","On-device inference","AI product design"],project:"AERO",slug:"aero"},
- {name:"Development",items:["TypeScript","Python","Kotlin","React / Next.js"],project:"Journey Safety",slug:"journey-safety"}
+ {name:"Security & testing",items:["Burp Suite","Nmap","Wireshark","Wazuh SIEM","Zabbix","OWASP Top 10"]},
+ {name:"CTF & forensics",items:["Steganography","Binwalk","ExifTool","Malware analysis (learning)"]},
+ {name:"Programming",items:["Python","Java","Kotlin","C++","JavaScript","SQL","Bash"]},
+ {name:"Frameworks",items:["React","Next.js","FastAPI","Jetpack Compose","Supabase","Firebase"]},
 ] as const;
-export const profile={displayName:"MR!JK!",legalName:"Jaikiran E",headline:"Cyber Security Student & CTF Operator",education:"Third-year B.E. Computer Science and Engineering (Cyber Security)",institution:"R.M.K. College of Engineering and Technology, Chennai",about:"I build security tools, local-first AI and resilient digital products. My work starts with trust boundaries and ends with evidence.",linkedin:"https://www.linkedin.com/in/jaikiran-e-mr1jk1/"} as const;
-export const optionalContent={experience:[] as {role:string;organization:string;period?:string;summary?:string}[],education:[] as {institution:string;degree:string;period?:string}[],certifications:[] as {name:string;issuer:string;date?:string;url?:string}[],honors:[] as {name:string;issuer?:string;date?:string}[],volunteering:[] as {role:string;organization:string;summary?:string}[],learning:[] as string[],writeups:[] as {challenge:string;category:string;approach:string;tools:string[];lesson:string}[]};
+
+export const optionalContent={
+  experience:[
+    {role:"Cyber Security Intern",organization:"C-DAC, Chennai",period:"Jun 2025 – Jul 2025",summary:"Deployed Wazuh SIEM and Zabbix monitoring across Linux and Windows endpoints for real-time security event detection. Reviewed system logs, hardened Windows Firewall rules and applied Linux baseline security configurations."},
+    {role:"Software Development Intern",organization:"HTC Pvt Ltd",summary:"First-hand exposure to how an IT company delivers a project: team structure, roles and responsibilities, and collaborative workflows."},
+  ] as {role:string;organization:string;period?:string;summary?:string}[],
+  education:[
+    {institution:"R.M.K. College of Engineering and Technology, Chennai",degree:"B.E. Computer Science & Engineering (Cyber Security)",period:"2024 – 2028"},
+    {institution:"R.M.K. Matriculation Higher Secondary School",degree:"Higher Secondary Certificate (Computer Science)",period:"2022 – 2024"},
+  ] as {institution:string;degree:string;period?:string}[],
+  certifications:[
+    {name:"API Security & Vulnerability Testing",issuer:"APISEC"},
+    {name:"Certified Online Fraud Prevention Specialist (COFPS)",issuer:"COFPS"},
+    {name:"Oracle Cloud Infrastructure 2025 — Certified AI Foundations Associate",issuer:"Oracle",date:"2025"},
+    {name:"Introduction to Cybersecurity",issuer:"Cisco Networking Academy",date:"Jun 2025"},
+    {name:"Google AI Essentials Specialization",issuer:"Google / Coursera",date:"Jun 2025"},
+  ] as {name:string;issuer:string;date?:string;url?:string}[],
+  honors:[] as {name:string;issuer?:string;date?:string}[],
+  volunteering:[] as {role:string;organization:string;summary?:string}[],
+  learning:[] as string[],
+  writeups:[] as {challenge:string;category:string;approach:string;tools:string[];lesson:string}[],
+};
 export function evidenceId(value:string){let hash=2166136261;for(const character of value){hash^=character.charCodeAt(0);hash=Math.imul(hash,16777619)}return `EV-${(hash>>>0).toString(16).toUpperCase().padStart(8,"0")}`}
-export const proof={projects:projects.length,hackathons:hackathons.length};
+export const proof={projects:projects.length,hackathons:2};
 export const memories:{src:string;alt:string;width:number;height:number}[]=[];

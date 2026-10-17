@@ -9,7 +9,33 @@ import { Sparkle } from "./sparkle";
 
 export function Reveal({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => { const node = ref.current; if (!node) return; node.dataset.ready = "true"; const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { node.dataset.visible = "true"; observer.disconnect(); } }, { threshold: .12 }); observer.observe(node); return () => observer.disconnect(); }, []);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    node.dataset.ready = "true";
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          node.classList.add("visible");
+          node.dataset.visible = "true";
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    observer.observe(node);
+
+    // G3 Failsafe: force visible after 1.5s regardless of scroll/observer state
+    const timer = setTimeout(() => {
+      node.classList.add("visible");
+      node.dataset.visible = "true";
+    }, 1500);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
+  }, []);
   return <div ref={ref} className={cn("reveal", className)}>{children}</div>;
 }
 

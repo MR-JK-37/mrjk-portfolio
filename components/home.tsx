@@ -1,26 +1,490 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
-import {FormEvent,useEffect,useState} from "react";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {ArrowDown,ArrowRight,Send} from "./icons";
-import {evidenceId,hackathons,optionalContent,profile,projects,proof,skillGroups} from "@/lib/content";
-import {ProjectVisual,HackathonVisual} from "./visuals/project-visual";
-import {OperatorConsole} from "./operator-console";
-import {Sparkle} from "./sparkle";
-import {useToast} from "./shell";
-import {site} from "@/lib/site";
+import Image from "next/image";
+import {
+  ArrowRight, ArrowUpRight, Mail, Linkedin, MapPin, Briefcase,
+  Trophy, Shield, DollarSign, Building, Star,
+  Cpu, Network, Activity, Layers, Server, Target, Lock,
+} from "./icons";
+import { profile } from "@/content/profile";
+import { proofLog } from "@/content/achievements";
+import { featuredProjects, otherProjects } from "@/content/projects";
+import { skillGroups, currentlyExploring } from "@/content/skills";
+import { site } from "@/lib/site";
 
-export function Hero(){const[identity,setIdentity]=useState<"student"|"operator">("student");useEffect(()=>{const saved=sessionStorage.getItem("identity");if(saved==="operator")setIdentity(saved)},[]);function choose(value:"student"|"operator"){setIdentity(value);sessionStorage.setItem("identity",value)}return <section className="hero" aria-labelledby="hero-title"><div className="hero-grid" aria-hidden="true"/><div className="orb orb--burgundy" aria-hidden="true"/><div className="orb orb--teal" aria-hidden="true"/><div className="container hero-inner"><div className="hero-copy"><p className="section-kicker"><Sparkle/> Case file / Jaikiran E</p><h1 className="display" id="hero-title">I trace the gap.<br/><em>Then build the fix.</em></h1><p className="hero-lede">Cyber security student building defensive tools, local-first AI and resilient products—one explicit trust boundary at a time.</p><div className="identity-switch" role="group" aria-label="Choose profile perspective"><button aria-pressed={identity==="student"} onClick={()=>choose("student")}>Student</button><button aria-pressed={identity==="operator"} onClick={()=>choose("operator")}>CTF Operator</button></div><p className="identity-copy" aria-live="polite">{identity==="student"?`${profile.education} at ${profile.institution}.`:"Maps trust boundaries. Tests assumptions. Records evidence before making a claim."}</p><div className="hero-actions"><Link className="button button--primary magnetic" href="#work">Open case files <ArrowRight size={17}/></Link><a className="button button--secondary" href="#after-terminal">Skip terminal <ArrowDown size={17}/></a></div></div><div className="hero-console"><OperatorConsole identity={identity}/><aside className="hero-status glass"><span className="status-dot"/><strong>Open to internships & collaborations</strong></aside></div></div><div id="after-terminal" className="container featured-strip glass" aria-label="Portfolio evidence"><span className="mono">INDEX / VERIFIED SCOPE</span><div><strong>{proof.projects}</strong><small>named projects</small></div><div><strong>{proof.hackathons}</strong><small>documented events</small></div><div><strong>Chennai · IST</strong><small>operator location</small></div></div></section>}
+/* ════════════════════════════════════════════
+   FEATURED IN — floating glass strip (real items only)
+════════════════════════════════════════════ */
+const FEATURED_IN = [
+  { id: "bugcrowd", icon: "dollar" as const, label: "$650", sublabel: "Bug Bounty", detail: "Glassdoor Security Team" },
+  { id: "cdac",     icon: "building" as const, label: "Internship", sublabel: "C-DAC Chennai", detail: "Jun – Jul 2025" },
+  { id: "drestein", icon: "trophy" as const, label: "₹1,00,000", sublabel: "1st Prize", detail: "DRESTEIN '26" },
+  { id: "defcon",   icon: "shield" as const, label: "8th Place", sublabel: "DEFCON-conducted CTF", detail: "International, team" },
+];
+const ACHIEVEMENT_ICONS = { trophy: Trophy, shield: Shield, dollar: DollarSign, building: Building, star: Star };
 
-export function Work(){return <section className="section work-scene" id="work" aria-labelledby="work-title"><div className="container work-heading"><p className="section-kicker"><Sparkle/> Evidence locker</p><h2 className="section-title" id="work-title">Five systems.<br/>Five different failure surfaces.</h2><p className="lede">Open a file for constraints, architecture and security decisions. Status labels are intentionally conservative.</p></div><div className="case-stack container">{projects.map(project=><article className="case-card glass-strong" key={project.slug}><div className="case-card-copy"><div className="case-label"><span className="mono">CASE {project.caseNumber} / {project.classification}</span><strong className={`stamp stamp--${project.status.toLowerCase().replaceAll(" ","-")}`}>{project.status}</strong></div><h3>{project.name}</h3><p>{project.summary}</p><div className="case-redaction"><span aria-hidden="true">████████</span><span>role / {project.role}</span></div><div className="case-meta mono">{project.stack.slice(0,3).join(" · ")} {project.year?`/ ${project.year}`:""}</div><Link className="case-open" href={`/work/${project.slug}`}>Examine evidence <ArrowRight size={16}/></Link></div><ProjectVisual kind={project.slug}/></article>)}</div></section>}
+export function AchievementStrip() {
+  const ref = useRef<HTMLDivElement>(null);
 
-export function Proof(){return <section className="section section--navy proof" id="proof" aria-labelledby="proof-title"><div className="container proof-heading"><p className="section-kicker"><Sparkle/> Chain of custody</p><h2 className="section-title" id="proof-title">Built under a clock.<br/>Recorded without mythology.</h2></div><div className="timeline container" data-lenis-prevent tabIndex={0} aria-label="Hackathon evidence timeline">{hackathons.map((item,index)=><article className="timeline-item glass" key={item.name}><div className="timeline-id"><Sparkle/><span className="mono">{evidenceId(`${item.name}/${item.project}`)}</span></div><HackathonVisual index={index}/><p className="mono">{item.year}{item.team?` / TEAM ${item.team.toUpperCase()}`:""}</p><h3>{item.project}</h3><h4>{item.name}</h4><p>{item.detail}</p><ul>{item.decisions.map(decision=><li key={decision}>{decision}</li>)}</ul><p className="timeline-lesson"><strong>Lesson:</strong> {item.lesson}</p>{item.result&&<span className="stamp">{item.result}</span>}</article>)}</div></section>}
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && ref.current?.classList.add("in-view"),
+      { threshold: 0.3 },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
-export function Toolkit(){return <section className="section section--cream-deep" id="toolkit" aria-labelledby="toolkit-title"><div className="container toolkit-layout"><div><p className="section-kicker"><Sparkle/> Field kit</p><h2 className="section-title" id="toolkit-title">Skills with a case number.</h2><p className="lede">No progress bars. Each capability points back to work where it was used.</p></div><div className="skills-ledger">{skillGroups.map((group,index)=><article key={group.name}><span className="mono">0{index+1}</span><div><h3>{group.name}</h3><p>{group.items.join(" · ")}</p><small>Evidence: {"slug" in group&&group.slug?<Link href={`/work/${group.slug}`}>{group.project} ↗</Link>:group.project}</small></div></article>)}</div></div></section>}
+  return (
+    <div className="achievement-strip">
+      <div className="container achievement-strip-container">
+        <div ref={ref} className="achievement-strip-inner reveal">
+          <p className="achievement-strip-eyebrow">
+            <span aria-hidden="true" />
+            FEATURED IN
+          </p>
+          <div className="achievement-strip-items">
+            {FEATURED_IN.map((a) => {
+              const Icon = ACHIEVEMENT_ICONS[a.icon];
+              return (
+                <div key={a.id} className="achievement-item">
+                  <div className="achievement-icon"><Icon size={20} /></div>
+                  <div className="achievement-label" data-count-to={a.label}>{a.label}</div>
+                  <div className="achievement-sublabel">{a.sublabel}</div>
+                  <div className="achievement-detail">{a.detail}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-export function About(){return <section className="section about" id="about" aria-labelledby="about-title"><div className="container about-grid"><div className="about-mark" aria-hidden="true"><Sparkle/><span>MR<br/>JK</span><small>CASE OWNER<br/>CHENNAI</small></div><div><p className="section-kicker"><Sparkle/> Operator statement</p><h2 className="section-title" id="about-title">Specific about the work.<br/>Careful about the claim.</h2><p className="lede">{profile.about}</p><p>{profile.education} at {profile.institution}. Current interests include offensive security, detection, digital evidence and private local AI.</p>{optionalContent.learning.length>0&&<div className="learning-note"><span className="mono">Learning now</span><p>{optionalContent.learning.join(" · ")}</p></div>}</div></div></section>}
+/* ════════════════════════════════════════════
+   SELECTED WORK — real projects, simple inset visuals
+════════════════════════════════════════════ */
+const STACK_ICONS: Record<string, React.ReactNode> = {
+  nextjs:     <span style={{ fontWeight: 900, fontSize: ".7rem" }}>N</span>,
+  fastapi:    <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#00c7b1" }}>⬡</span>,
+  postgresql: <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#336791" }}>⬡</span>,
+  python:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#1D5380" }}>Py</span>,
+  ai:         <span style={{ fontWeight: 900, fontSize: ".6rem" }}>AI</span>,
+  react:      <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#61dafb" }}>⚛</span>,
+  kotlin:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#7F52FF" }}>K</span>,
+  android:    <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#3DDC84" }}>▲</span>,
+  firebase:   <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#FFA000" }}>▲</span>,
+};
 
-export function Contact({enabled}:{enabled:boolean}){const[busy,setBusy]=useState(false);const{notify}=useToast();async function submit(event:FormEvent<HTMLFormElement>){event.preventDefault();const formElement=event.currentTarget;setBusy(true);try{const response=await fetch("/api/contact",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(formElement).entries()))});const result=await response.json() as{message?:string};if(!response.ok)throw new Error(result.message??"Message could not be sent.");notify("Message sent.");formElement.reset()}catch(error){notify(error instanceof Error?error.message:"Message could not be sent.","error")}finally{setBusy(false)}}const links=[site.email&&{label:"Email",href:`mailto:${site.email}`},site.github&&{label:"GitHub",href:site.github},{label:"LinkedIn",href:site.linkedin},site.resume&&{label:"Resume PDF",href:site.resume}].filter(Boolean) as {label:string;href:string}[];return <section className="section section--navy contact" id="contact" aria-labelledby="contact-title"><div className="container contact-grid"><div><p className="section-kicker"><Sparkle/> Secure channel</p><h2 className="section-title" id="contact-title">Bring context.<br/>I’ll bring a threat model.</h2><p className="lede">For internships, security projects and thoughtful collaborations.</p><div className="contact-links">{links.map(link=><a key={link.label} href={link.href} target={link.href.startsWith("http")?"_blank":undefined} rel="noreferrer">{link.label} ↗</a>)}</div></div>{enabled?<form className="contact-form glass" onSubmit={submit}><FloatField id="name" label="Name"/><FloatField id="email" label="Email" type="email"/><div className="field honeypot" aria-hidden="true"><label htmlFor="website">Website</label><input id="website" name="website" tabIndex={-1} autoComplete="off"/></div><div className="float-field"><textarea id="message" name="message" required minLength={20} maxLength={2000}/><label htmlFor="message">What are we solving?</label></div><button className="button button--light" type="submit" disabled={busy}>{busy?"Sending…":"Send message"}<Send size={16}/></button></form>:<div className="contact-closed glass"><span className="mono">FORM / OFFLINE</span><p>Mail transport is not configured. Use the available verified profile link.</p></div>}</div></section>}
-function FloatField({id,label,type="text"}:{id:string;label:string;type?:string}){return <div className="float-field"><input id={id} name={id} type={type} required minLength={id==="name"?2:undefined} maxLength={id==="email"?160:80}/><label htmlFor={id}>{label}</label></div>}
+function WeCareVisual() {
+  return (
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
+      <rect width="320" height="180" fill="#0a1630" />
+      <circle cx="60" cy="90" r="34" fill="none" stroke="#35D07F" strokeWidth="3" opacity=".6" />
+      <circle cx="60" cy="90" r="18" fill="#35D07F" opacity=".25" />
+      <rect x="120" y="40" width="160" height="10" rx="3" fill="rgba(248,240,229,.3)" />
+      <rect x="120" y="62" width="120" height="8" rx="3" fill="rgba(248,240,229,.18)" />
+      <rect x="120" y="100" width="90" height="26" rx="6" fill="#A32847" opacity=".5" />
+      <rect x="220" y="100" width="60" height="26" rx="6" fill="rgba(248,240,229,.12)" />
+      <rect x="120" y="140" width="160" height="8" rx="3" fill="rgba(248,240,229,.14)" />
+    </svg>
+  );
+}
+function NetPulseVisual() {
+  return (
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
+      <rect width="320" height="180" fill="#0a1630" />
+      <polyline points="20,140 60,110 95,125 130,80 165,100 200,60 235,95 270,50 300,75" fill="none" stroke="#C8405F" strokeWidth="2.5" />
+      <circle cx="130" cy="80" r="4" fill="#C8405F" />
+      <circle cx="200" cy="60" r="4" fill="#C8405F" />
+      <rect x="20" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
+      <rect x="90" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
+      <rect x="160" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
+      <rect x="230" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
+    </svg>
+  );
+}
+function AranVisual() {
+  return (
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
+      <rect width="320" height="180" fill="#0a1630" />
+      <rect x="30" y="30" width="60" height="60" rx="8" fill="rgba(248,240,229,.1)" />
+      <text x="60" y="66" textAnchor="middle" fontSize="20" fill="#35D07F" fontWeight="700">87</text>
+      <rect x="110" y="30" width="60" height="60" rx="8" fill="rgba(248,240,229,.1)" />
+      <text x="140" y="66" textAnchor="middle" fontSize="20" fill="#E0B23D" fontWeight="700">62</text>
+      <rect x="190" y="30" width="60" height="60" rx="8" fill="rgba(163,40,71,.3)" />
+      <text x="220" y="66" textAnchor="middle" fontSize="20" fill="#C8405F" fontWeight="700">24</text>
+      <rect x="30" y="110" width="220" height="8" rx="4" fill="rgba(248,240,229,.15)" />
+      <rect x="30" y="128" width="160" height="8" rx="4" fill="rgba(248,240,229,.15)" />
+      <rect x="30" y="146" width="190" height="8" rx="4" fill="rgba(248,240,229,.15)" />
+    </svg>
+  );
+}
+const PROJECT_VISUALS: Record<string, React.ReactNode> = {
+  "we-care": <WeCareVisual />,
+  netpulse: <NetPulseVisual />,
+  aran: <AranVisual />,
+};
+const PROJECT_ICONS: Record<string, React.ReactNode> = {
+  "we-care": <Layers size={20} />,
+  netpulse: <Network size={20} />,
+  aran: <Target size={20} />,
+};
 
-export function Footer(){const[time,setTime]=useState("");useEffect(()=>{const tick=()=>setTime(new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date()));tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[]);return <footer className="footer section--deep"><div className="container footer-grid"><div><Link className="brand" href="/"><Sparkle/> MR!JK!</Link><p>Build clearly. Test carefully. Show the evidence.</p></div><nav aria-label="Footer navigation"><Link href="/#work">Work</Link><Link href="/resume">Resume</Link><Link href="/design-system">Design system</Link><Link href="/security">How this site is secured</Link></nav><p className="mono">© {new Date().getFullYear()} MR!JK! · CHENNAI {time||"IST"}</p></div></footer>}
+function ProjectCard({ project, index }: { project: typeof featuredProjects[number]; index: number }) {
+  return (
+    <Link
+      href={`/work/${project.slug}`}
+      className="project-card-new reveal"
+      style={{ transitionDelay: `${index * 90}ms` }}
+    >
+      <div className="project-card-top">
+        <div className="project-number-row">
+          <span className="project-category-pill">{project.categoryPill}</span>
+          <span className="project-card-number">{project.number}</span>
+        </div>
+        <div className="project-icon-tile">{PROJECT_ICONS[project.id]}</div>
+        <div className="project-card-name">{project.name}</div>
+        <div className="project-card-summary">{project.summary}</div>
+      </div>
+
+      <div className="project-visual-inset" aria-hidden="true">
+        {PROJECT_VISUALS[project.id]}
+      </div>
+
+      <div className="project-card-footer">
+        <div className="project-stack-chips">
+          {project.stack.map((s) => (
+            <span key={s.name} className="stack-chip">
+              {STACK_ICONS[s.icon]}
+              {s.name}
+            </span>
+          ))}
+        </div>
+        <span className="project-arrow-btn" aria-hidden="true"><ArrowUpRight size={16} /></span>
+      </div>
+    </Link>
+  );
+}
+
+export function SelectedWork() {
+  return (
+    <section className="section work-section" id="work" aria-labelledby="work-title">
+      <div className="container">
+        <div className="work-header reveal">
+          <div className="work-header-left">
+            <div className="eyebrow" style={{ marginBottom: ".75rem" }}>FEATURED PROJECTS</div>
+            <div className="work-title-row">
+              <h2 id="work-title" className="h2">Selected Work</h2>
+              <div className="work-title-line" aria-hidden="true" />
+            </div>
+          </div>
+          <Link href="/projects" className="work-header-link">
+            View All Projects <ArrowRight size={15} />
+          </Link>
+        </div>
+
+        <div className="projects-grid">
+          {featuredProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+
+        {otherProjects.length > 0 && (
+          <div style={{ marginTop: "3rem", display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+            {otherProjects.map((p) => (
+              <span key={p.id} className="stack-chip" style={{ fontSize: ".82rem", padding: ".5rem 1rem" }}>
+                {p.name}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════
+   CTFs & HIGHLIGHTS — real, dated, from resume/LinkedIn
+════════════════════════════════════════════ */
+export function HighlightsSection() {
+  const items = proofLog.filter((e) => e.kind === "bounty" || e.kind === "hackathon" || e.kind === "ctf");
+  const kindLabel: Record<string, string> = { bounty: "Bug bounty", hackathon: "Hackathon", ctf: "CTF" };
+
+  return (
+    <section className="section highlights-section" id="highlights" aria-labelledby="highlights-title">
+      <div className="container">
+        <p className="eyebrow">ACHIEVEMENTS</p>
+        <h2 id="highlights-title" className="h2" style={{ color: "var(--navy)" }}>CTFs &amp; Highlights</h2>
+        <div className="highlights-grid">
+          {items.map((entry, index) => (
+            <div
+              key={entry.id}
+              className="highlight-card reveal"
+              style={{ transitionDelay: `${(index % 4) * 70}ms` }}
+            >
+              <span className="highlight-kind">{kindLabel[entry.kind]}</span>
+              <h3 className="highlight-title">{entry.title}</h3>
+              {entry.detail && <p className="highlight-detail">{entry.detail}</p>}
+              <span className="highlight-date">{entry.date}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════
+   MY ARSENAL — filter tabs, real skills from resume
+════════════════════════════════════════════ */
+const GROUP_ICONS: Record<string, React.ReactNode> = {
+  security: <Lock size={15} />,
+  ctf: <Activity size={15} />,
+  programming: <Cpu size={15} />,
+  frameworks: <Server size={15} />,
+};
+
+export function Arsenal() {
+  const [active, setActive] = useState<string>("all");
+  const visibleGroups = active === "all" ? skillGroups : skillGroups.filter((g) => g.id === active);
+
+  return (
+    <section className="section arsenal-section arsenal-section--cream" id="arsenal" aria-labelledby="arsenal-title">
+      <div className="container">
+        <div className="arsenal-layout">
+          <div className="arsenal-col-left reveal" style={{ flex: "1 1 100%" }}>
+            <div className="arsenal-label">SKILLS &amp; TOOLS</div>
+            <h2 id="arsenal-title" className="h2" style={{ color: "var(--navy)", marginBottom: "1.5rem" }}>My Arsenal</h2>
+
+            <div className="arsenal-filter-tabs" role="group" aria-label="Filter skills">
+              <button
+                className={`arsenal-filter-tab${active === "all" ? " active" : ""}`}
+                onClick={() => setActive("all")}
+                aria-pressed={active === "all"}
+                type="button"
+              >
+                All
+              </button>
+              {skillGroups.map((g) => (
+                <button
+                  key={g.id}
+                  className={`arsenal-filter-tab${active === g.id ? " active" : ""}`}
+                  onClick={() => setActive(g.id)}
+                  aria-pressed={active === g.id}
+                  type="button"
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="arsenal-rows-wrap" role="list" aria-label="Skills">
+              {visibleGroups.map((group) => (
+                <div key={group.id} className="arsenal-row" style={{ marginBottom: ".6rem" }}>
+                  {group.items.map((item) => (
+                    <span key={item} className="arsenal-chip" role="listitem">
+                      <span className="arsenal-chip-icon">{GROUP_ICONS[group.id]}</span>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <Link href="/experience" className="arsenal-view-details">
+              View Details <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+
+        <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(8,32,82,.1)" }}>
+          <p className="achievement-strip-eyebrow" style={{ color: "var(--burgundy)" }}>CURRENTLY EXPLORING</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: ".6rem", marginTop: "1rem" }}>
+            {currentlyExploring.map((item) => (
+              <span key={item} className="arsenal-chip" style={{ fontSize: ".85rem" }}>{item}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════
+   ABOUT ME — dark teaser panel, real bio
+════════════════════════════════════════════ */
+export function AboutMe() {
+  return (
+    <section className="about-teaser" id="about" aria-labelledby="about-title">
+      <div className="container about-teaser-layout">
+        <div>
+          <Image
+            src="/images/portrait.jpg"
+            alt="Portrait of Jaikiran E"
+            width={260}
+            height={320}
+            style={{ objectFit: "cover", objectPosition: "top", borderRadius: "18px", border: "1px solid rgba(248,240,229,.15)" }}
+          />
+        </div>
+        <div className="about-teaser-body reveal">
+          <p className="eyebrow eyebrow--light">ABOUT ME</p>
+          <h2 id="about-title" className="about-teaser-heading">
+            A student, builder <br /> and <em>problem solver</em>.
+          </h2>
+          <p>{profile.about}</p>
+          <div className="about-chips" style={{ marginBottom: "1.5rem" }}>
+            <span className="about-chip">
+              <span className="about-chip-icon"><MapPin size={15} /></span>
+              <div className="about-chip-text"><span>{profile.location}</span></div>
+            </span>
+            <span className="about-chip">
+              <span className="about-chip-icon"><Briefcase size={15} /></span>
+              <div className="about-chip-text"><span>Open to internships &amp; opportunities</span></div>
+            </span>
+          </div>
+          <Link href="/experience" className="button button--outline">
+            Know More <ArrowRight size={15} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════
+   CONTACT — static: links only, no form/API
+════════════════════════════════════════════ */
+export function Contact() {
+  const links = [
+    site.email && { label: "Email", href: `mailto:${site.email}` },
+    { label: "GitHub", href: profile.github },
+    { label: "LinkedIn", href: profile.linkedin },
+    { label: "Bugcrowd", href: profile.bugcrowd },
+  ].filter(Boolean) as { label: string; href: string }[];
+
+  return (
+    <section className="section contact-section" id="contact" aria-labelledby="contact-title">
+      <div className="container">
+        <div className="contact-layout">
+          <div>
+            <p className="eyebrow eyebrow--light">CONTACT</p>
+            <h2 id="contact-title" className="h2">Let&apos;s talk.</h2>
+            <p style={{ marginTop: "1rem", maxWidth: "46ch", color: "rgba(248,240,229,.7)" }}>
+              I&apos;m looking for internships and projects where security research turns into working software.
+            </p>
+            <nav className="contact-links" aria-label="Contact links">
+              {links.map((link) => (
+                <a key={link.label} href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer" className="contact-link">
+                  {link.label} ↗
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="contact-form-wrap glass-navy" style={{ display: "flex", flexDirection: "column", gap: "1.25rem", padding: "2.25rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: ".85rem" }}>
+              <div style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--burgundy)", display: "grid", placeItems: "center", color: "var(--cream)", flexShrink: 0 }}>
+                <Linkedin size={20} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--cream)", margin: 0 }}>Direct Inquiries &amp; Collaboration</h3>
+                <p style={{ fontSize: ".82rem", color: "rgba(248,240,229,.75)", margin: ".2rem 0 0" }}>Open to security engineering internships, research, and technical projects.</p>
+              </div>
+            </div>
+            <p style={{ color: "rgba(248,240,229,.85)", fontSize: ".92rem", lineHeight: 1.6, margin: 0 }}>
+              The fastest way to reach me is through LinkedIn or direct email. I review incoming messages daily.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: ".75rem", marginTop: ".5rem" }}>
+              <a className="button button--burgundy" href={profile.linkedin} target="_blank" rel="noreferrer">
+                Connect on LinkedIn <ArrowUpRight size={15} />
+              </a>
+              {site.email ? (
+                <a className="button button--outline" href={`mailto:${site.email}`}>
+                  Send Email <Mail size={15} />
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════ */
+export function Footer() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const tick = () => setTime(
+      new Intl.DateTimeFormat("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+        hour12: false,
+      }).format(new Date()),
+    );
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const socials = [
+    { label: "GitHub",   href: profile.github },
+    { label: "LinkedIn", href: profile.linkedin },
+    { label: "Bugcrowd", href: profile.bugcrowd },
+    site.email && { label: "Email", href: `mailto:${site.email}` },
+  ].filter(Boolean) as { label: string; href: string }[];
+
+  return (
+    <footer className="site-footer" role="contentinfo">
+      <div className="container">
+        <div className="footer-layout">
+          <div>
+            <Link href="/" className="footer-brand">
+              <span style={{ color: "var(--burgundy)" }}>✦</span> {profile.displayName}
+            </Link>
+            <p className="footer-tagline">
+              Cybersecurity student building security tools and AI-powered products.
+            </p>
+          </div>
+
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link href="/projects">Projects</Link>
+            <Link href="/experience">Experience</Link>
+            <Link href="/#about">About</Link>
+            <Link href="/security">Security</Link>
+            <Link href="/resume">Resume</Link>
+          </nav>
+
+          <div className="footer-socials">
+            {socials.map((s) => (
+              <a key={s.label} href={s.href}
+                target={s.href.startsWith("http") ? "_blank" : undefined}
+                rel="noreferrer" className="footer-social">
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <span className="footer-copy">
+            © {new Date().getFullYear()} {profile.displayName} · {profile.location} · {time || "IST"}
+          </span>
+          <Link href="/security" className="footer-security-link">
+            Security Policy ↗
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+}
