@@ -135,5 +135,29 @@ export const optionalContent={
   writeups:[] as {challenge:string;category:string;approach:string;tools:string[];lesson:string}[],
 };
 export function evidenceId(value:string){let hash=2166136261;for(const character of value){hash^=character.charCodeAt(0);hash=Math.imul(hash,16777619)}return `EV-${(hash>>>0).toString(16).toUpperCase().padStart(8,"0")}`}
-export const proof={projects:projects.length,hackathons:2};
-export const memories:{src:string;alt:string;width:number;height:number}[]=[];
+export const memories: { src: string; alt: string; width: number; height: number }[] = [
+  {
+    src: "/images/achievements/glassdoor-bounty-650.jpg",
+    alt: "Official RMK College announcement poster congratulating Jaikiran E for $650 Glassdoor bug bounty reward",
+    width: 819,
+    height: 1024,
+  },
+  {
+    src: "/images/achievements/drestein-100k-first-prize.jpg",
+    alt: "Jaikiran and team of four receiving the Rs 1,00,000 First Prize winner cheque at DRESTEIN 26, Saveetha Engineering College",
+    width: 768,
+    height: 1024,
+  },
+  {
+    src: "/images/achievements/hackathon-podium-award.jpg",
+    alt: "Jaikiran holding certificate of excellence with team and university faculty dignitaries on auditorium stage",
+    width: 480,
+    height: 360,
+  },
+  {
+    src: "/images/achievements/ceremony-certificate-stage.jpg",
+    alt: "Jaikiran receiving winner honors and certificate from dignitaries during college technical award ceremony",
+    width: 480,
+    height: 319,
+  },
+];

@@ -1,0 +1,18 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "rewrites": [
+    { "source": "/resume", "destination": "/resume/index.html" },
+    { "source": "/resume/", "destination": "/resume/index.html" },
+    { "source": "/security", "destination": "/security/index.html" },
+    { "source": "/security/", "destination": "/security/index.html" },
+    { "source": "/projects", "destination": "/projects/index.html" },
+    { "source": "/projects/", "destination": "/projects/index.html" },
+    { "source": "/experience", "destination": "/experience/index.html" },
+    { "source": "/experience/", "destination": "/experience/index.html" },
+    { "source": "/memories", "destination": "/memories/index.html" },
+    { "source": "/memories/", "destination": "/memories/index.html" },
+    { "source": "/work/:slug", "destination": "/work/:slug/index.html" },
+    { "source": "/work/:slug/", "destination": "/work/:slug/index.html" }
+  ]
+}

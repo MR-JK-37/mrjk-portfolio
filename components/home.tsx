@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight, ArrowUpRight, Mail, Linkedin, MapPin, Briefcase,
-  Trophy, Shield, DollarSign, Building, Star,
+  Trophy, Shield, DollarSign, Building, Star, Medal,
   Cpu, Network, Activity, Layers, Server, Target, Lock,
 } from "./icons";
 import { profile } from "@/content/profile";
@@ -18,12 +18,13 @@ import { site } from "@/lib/site";
    FEATURED IN — floating glass strip (real items only)
 ════════════════════════════════════════════ */
 const FEATURED_IN = [
-  { id: "bugcrowd", icon: "dollar" as const, label: "$650", sublabel: "Bug Bounty", detail: "Glassdoor Security Team" },
-  { id: "cdac",     icon: "building" as const, label: "Internship", sublabel: "C-DAC Chennai", detail: "Jun – Jul 2025" },
-  { id: "drestein", icon: "trophy" as const, label: "₹1,00,000", sublabel: "1st Prize", detail: "DRESTEIN '26" },
-  { id: "defcon",   icon: "shield" as const, label: "8th Place", sublabel: "DEFCON-conducted CTF", detail: "International, team" },
+  { id: "noctivus", icon: "trophy" as const,   label: "4th Place",   sublabel: "NOCTIVUS '25", detail: "Team CYBERBEINGS" },
+  { id: "nullcore", icon: "medal" as const,    label: "13th Place",  sublabel: "NULL CORE",    detail: "Team SPARTANS" },
+  { id: "bugcrowd", icon: "shield" as const,   label: "$650",        sublabel: "Bug Bounty",   detail: "Glassdoor Security Team" },
+  { id: "cdac",     icon: "building" as const, label: "Internship",  sublabel: "C-DAC Chennai", detail: "Jun 2025 – Jul 2025" },
+  { id: "gemini",   icon: "star" as const,     label: "Shortlisted", sublabel: "Google Gemini", detail: "Student Ambassador 2026" },
 ];
-const ACHIEVEMENT_ICONS = { trophy: Trophy, shield: Shield, dollar: DollarSign, building: Building, star: Star };
+const ACHIEVEMENT_ICONS = { trophy: Trophy, medal: Medal, shield: Shield, dollar: DollarSign, building: Building, star: Star };
 
 export function AchievementStrip() {
   const ref = useRef<HTMLDivElement>(null);
@@ -69,61 +70,161 @@ export function AchievementStrip() {
    SELECTED WORK — real projects, simple inset visuals
 ════════════════════════════════════════════ */
 const STACK_ICONS: Record<string, React.ReactNode> = {
-  nextjs:     <span style={{ fontWeight: 900, fontSize: ".7rem" }}>N</span>,
-  fastapi:    <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#00c7b1" }}>⬡</span>,
-  postgresql: <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#336791" }}>⬡</span>,
-  python:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#1D5380" }}>Py</span>,
-  ai:         <span style={{ fontWeight: 900, fontSize: ".6rem" }}>AI</span>,
+  nextjs:     <span style={{ fontWeight: 900, fontSize: ".7rem", color: "#F8FAFC" }}>N</span>,
+  fastapi:    <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#2DD4BF" }}>⬡</span>,
+  postgresql: <span style={{ fontWeight: 900, fontSize: ".55rem", color: "#60A5FA" }}>⬡</span>,
+  python:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#38BDF8" }}>Py</span>,
+  ai:         <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#FB7185" }}>AI</span>,
   react:      <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#61dafb" }}>⚛</span>,
-  kotlin:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#7F52FF" }}>K</span>,
+  kotlin:     <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#A78BFA" }}>K</span>,
   android:    <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#3DDC84" }}>▲</span>,
-  firebase:   <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#FFA000" }}>▲</span>,
+  firebase:   <span style={{ fontWeight: 900, fontSize: ".6rem", color: "#FBBF24" }}>▲</span>,
 };
 
 function WeCareVisual() {
   return (
-    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
-      <rect width="320" height="180" fill="#0a1630" />
-      <circle cx="60" cy="90" r="34" fill="none" stroke="#35D07F" strokeWidth="3" opacity=".6" />
-      <circle cx="60" cy="90" r="18" fill="#35D07F" opacity=".25" />
-      <rect x="120" y="40" width="160" height="10" rx="3" fill="rgba(248,240,229,.3)" />
-      <rect x="120" y="62" width="120" height="8" rx="3" fill="rgba(248,240,229,.18)" />
-      <rect x="120" y="100" width="90" height="26" rx="6" fill="#A32847" opacity=".5" />
-      <rect x="220" y="100" width="60" height="26" rx="6" fill="rgba(248,240,229,.12)" />
-      <rect x="120" y="140" width="160" height="8" rx="3" fill="rgba(248,240,229,.14)" />
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="wecareBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0B1A30" />
+          <stop offset="100%" stopColor="#050E1A" />
+        </linearGradient>
+        <linearGradient id="ecgGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#10B981" />
+          <stop offset="80%" stopColor="#38BDF8" />
+          <stop offset="100%" stopColor="#FB7185" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#wecareBg)" />
+      
+      {/* Grid Lines */}
+      <g opacity="0.1">
+        <line x1="0" y1="45" x2="320" y2="45" stroke="#38BDF8" strokeWidth="0.8" />
+        <line x1="0" y1="90" x2="320" y2="90" stroke="#38BDF8" strokeWidth="0.8" />
+        <line x1="0" y1="135" x2="320" y2="135" stroke="#38BDF8" strokeWidth="0.8" />
+      </g>
+
+      {/* Top Telemetry Header */}
+      <rect x="12" y="10" width="296" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+      <circle cx="24" cy="21" r="3" fill="#10B981" />
+      <text x="34" y="24" fill="#38BDF8" fontSize="8" fontFamily="var(--font-mono)" fontWeight="700">AI CAREGIVER MONITOR</text>
+      <text x="220" y="24" fill="#10B981" fontSize="7.5" fontFamily="var(--font-mono)" fontWeight="700">STAGE-2 ACTIVE</text>
+
+      {/* Voice Frequency Spectrogram Bars */}
+      <g transform="translate(18, 48)">
+        {[14, 28, 42, 22, 36, 50, 62, 38, 20, 48, 56, 32, 18, 40, 52, 24].map((h, i) => (
+          <rect key={i} x={i * 8} y={65 - h} width="5" height={h} rx="2" fill="rgba(56, 189, 248, 0.65)" />
+        ))}
+        <text x="0" y="80" fill="rgba(248,240,229,0.7)" fontSize="7" fontFamily="var(--font-mono)">VOICE BIOMARKER TRIAGE</text>
+      </g>
+
+      {/* Dementia Cognitive Orientation Gauge */}
+      <g transform="translate(195, 52)">
+        <circle cx="50" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="5" />
+        <circle cx="50" cy="40" r="30" fill="none" stroke="#10B981" strokeWidth="5" strokeDasharray="160 190" strokeLinecap="round" />
+        <text x="50" y="38" textAnchor="middle" fill="#FFFFFF" fontSize="14" fontFamily="var(--font-display)" fontWeight="700">94%</text>
+        <text x="50" y="50" textAnchor="middle" fill="rgba(248,240,229,0.7)" fontSize="6" fontFamily="var(--font-mono)">ORIENTATION</text>
+      </g>
+
+      {/* Biometric ECG Wave Trace */}
+      <path d="M 12 155 L 70 155 L 80 142 L 90 168 L 100 132 L 110 162 L 120 155 L 200 155 L 210 145 L 220 165 L 230 155 L 308 155" fill="none" stroke="url(#ecgGrad)" strokeWidth="1.8" />
+      <circle cx="100" cy="132" r="3" fill="#FB7185" />
+      <text x="14" y="172" fill="rgba(248,240,229,0.6)" fontSize="6.5" fontFamily="var(--font-mono)">TELEMETRY: DRESTEIN 1ST PRIZE [₹1,00,000] • KOTLIN + FASTAPI</text>
     </svg>
   );
 }
+
 function NetPulseVisual() {
   return (
-    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
-      <rect width="320" height="180" fill="#0a1630" />
-      <polyline points="20,140 60,110 95,125 130,80 165,100 200,60 235,95 270,50 300,75" fill="none" stroke="#C8405F" strokeWidth="2.5" />
-      <circle cx="130" cy="80" r="4" fill="#C8405F" />
-      <circle cx="200" cy="60" r="4" fill="#C8405F" />
-      <rect x="20" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
-      <rect x="90" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
-      <rect x="160" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
-      <rect x="230" y="150" width="60" height="6" rx="3" fill="rgba(248,240,229,.2)" />
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="netBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0B1528" />
+          <stop offset="100%" stopColor="#040914" />
+        </linearGradient>
+        <linearGradient id="areaGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(251, 113, 133, 0.4)" />
+          <stop offset="100%" stopColor="rgba(251, 113, 133, 0)" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#netBg)" />
+
+      {/* Top Header Strip */}
+      <rect x="12" y="10" width="296" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+      <circle cx="24" cy="21" r="3" fill="#FB7185" />
+      <text x="34" y="24" fill="#F8FAFC" fontSize="8" fontFamily="var(--font-mono)" fontWeight="700">NETPULSE // ARP SNIFFER</text>
+      <text x="215" y="24" fill="#38BDF8" fontSize="7.5" fontFamily="var(--font-mono)" fontWeight="700">8,420 PKTS/S</text>
+
+      {/* Traffic Throughput Area Wave */}
+      <path d="M 12 110 L 45 88 L 85 96 L 125 58 L 165 78 L 205 45 L 245 70 L 285 38 L 308 55 L 308 118 L 12 118 Z" fill="url(#areaGlow)" />
+      <polyline points="12,110 45,88 85,96 125,58 165,78 205,45 245,70 285,38 308,55" fill="none" stroke="#FB7185" strokeWidth="2" />
+      <circle cx="205" cy="45" r="3" fill="#FB7185" />
+      <circle cx="285" cy="38" r="3" fill="#38BDF8" />
+
+      {/* Live Packet Inspection Log Terminal */}
+      <g transform="translate(12, 122)">
+        <rect x="0" y="0" width="296" height="48" rx="4" fill="rgba(2, 6, 16, 0.85)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+        <text x="8" y="13" fill="#38BDF8" fontSize="6.5" fontFamily="var(--font-mono)">[ARP] 192.168.1.104 &gt; WHO-HAS 192.168.1.1? [RESOLVED]</text>
+        <text x="8" y="26" fill="#10B981" fontSize="6.5" fontFamily="var(--font-mono)">[DEVICE] NEW HOST DISCOVERED: 00:1A:2B:6C:8D [SAFE]</text>
+        <text x="8" y="39" fill="#FB7185" fontSize="6.5" fontFamily="var(--font-mono)">[SECURITY] PROMISCUOUS PACKET AUDIT: 0 ANOMALIES</text>
+      </g>
     </svg>
   );
 }
+
 function AranVisual() {
   return (
-    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none">
-      <rect width="320" height="180" fill="#0a1630" />
-      <rect x="30" y="30" width="60" height="60" rx="8" fill="rgba(248,240,229,.1)" />
-      <text x="60" y="66" textAnchor="middle" fontSize="20" fill="#35D07F" fontWeight="700">87</text>
-      <rect x="110" y="30" width="60" height="60" rx="8" fill="rgba(248,240,229,.1)" />
-      <text x="140" y="66" textAnchor="middle" fontSize="20" fill="#E0B23D" fontWeight="700">62</text>
-      <rect x="190" y="30" width="60" height="60" rx="8" fill="rgba(163,40,71,.3)" />
-      <text x="220" y="66" textAnchor="middle" fontSize="20" fill="#C8405F" fontWeight="700">24</text>
-      <rect x="30" y="110" width="220" height="8" rx="4" fill="rgba(248,240,229,.15)" />
-      <rect x="30" y="128" width="160" height="8" rx="4" fill="rgba(248,240,229,.15)" />
-      <rect x="30" y="146" width="190" height="8" rx="4" fill="rgba(248,240,229,.15)" />
+    <svg className="proj-visual" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="aranBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0B172C" />
+          <stop offset="100%" stopColor="#040914" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#aranBg)" />
+
+      {/* Top Header Strip */}
+      <rect x="12" y="10" width="296" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+      <circle cx="24" cy="21" r="3" fill="#FBBF24" />
+      <text x="34" y="24" fill="#F8FAFC" fontSize="8" fontFamily="var(--font-mono)" fontWeight="700">ARAN // EDGE-AI TELEMETRY</text>
+      <text x="210" y="24" fill="#10B981" fontSize="7.5" fontFamily="var(--font-mono)" fontWeight="700">MACHINE HEALTH: 96%</text>
+
+      {/* Three Metric Bento Gauges */}
+      <g transform="translate(12, 38)">
+        {/* Metric 1: Vibration */}
+        <rect x="0" y="0" width="94" height="60" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(16, 185, 129, 0.3)" strokeWidth="0.8" />
+        <text x="10" y="16" fill="rgba(248, 240, 229, 0.6)" fontSize="6" fontFamily="var(--font-mono)">VIBRATION</text>
+        <text x="10" y="38" fill="#10B981" fontSize="18" fontFamily="var(--font-display)" fontWeight="700">1.8</text>
+        <text x="44" y="38" fill="rgba(248, 240, 229, 0.6)" fontSize="7" fontFamily="var(--font-mono)">mm/s</text>
+        <text x="10" y="52" fill="#10B981" fontSize="6.5" fontFamily="var(--font-mono)">✓ NOMINAL</text>
+
+        {/* Metric 2: Temperature */}
+        <rect x="101" y="0" width="94" height="60" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="0.8" />
+        <text x="111" y="16" fill="rgba(248, 240, 229, 0.6)" fontSize="6" fontFamily="var(--font-mono)">CORE TEMP</text>
+        <text x="111" y="38" fill="#38BDF8" fontSize="18" fontFamily="var(--font-display)" fontWeight="700">42°</text>
+        <text x="145" y="38" fill="rgba(248, 240, 229, 0.6)" fontSize="7" fontFamily="var(--font-mono)">Celsius</text>
+        <text x="111" y="52" fill="#38BDF8" fontSize="6.5" fontFamily="var(--font-mono)">✓ STABLE</text>
+
+        {/* Metric 3: RUL */}
+        <rect x="202" y="0" width="94" height="60" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(251, 191, 36, 0.3)" strokeWidth="0.8" />
+        <text x="212" y="16" fill="rgba(248, 240, 229, 0.6)" fontSize="6" fontFamily="var(--font-mono)">REMAINING LIFE</text>
+        <text x="212" y="38" fill="#FBBF24" fontSize="18" fontFamily="var(--font-display)" fontWeight="700">840</text>
+        <text x="254" y="38" fill="rgba(248, 240, 229, 0.6)" fontSize="7" fontFamily="var(--font-mono)">Hours</text>
+        <text x="212" y="52" fill="#FBBF24" fontSize="6.5" fontFamily="var(--font-mono)">• NO RISK</text>
+      </g>
+
+      {/* FFT Vibration Frequency Bar Spectrum */}
+      <g transform="translate(16, 108)">
+        <text x="0" y="10" fill="rgba(248,240,229,0.7)" fontSize="6.5" fontFamily="var(--font-mono)">FFT VIBRATION FREQUENCY SPECTRUM (0–2000 Hz)</text>
+        {[8, 14, 22, 38, 26, 44, 18, 12, 28, 48, 30, 16, 20, 36, 10, 6, 12, 24, 16, 8].map((h, i) => (
+          <rect key={i} x={i * 14} y={55 - h} width="9" height={h} rx="2" fill="rgba(56, 189, 248, 0.6)" />
+        ))}
+      </g>
+      <text x="14" y="172" fill="rgba(248,240,229,0.6)" fontSize="6.5" fontFamily="var(--font-mono)">DEPLOYED: RASPBERRY PI + SCIKIT-LEARN • MSME HACKATHON 6.0</text>
     </svg>
   );
 }
+
 const PROJECT_VISUALS: Record<string, React.ReactNode> = {
   "we-care": <WeCareVisual />,
   netpulse: <NetPulseVisual />,
@@ -219,7 +320,7 @@ export function HighlightsSection() {
     <section className="section highlights-section" id="highlights" aria-labelledby="highlights-title">
       <div className="container">
         <p className="eyebrow">ACHIEVEMENTS</p>
-        <h2 id="highlights-title" className="h2" style={{ color: "var(--navy)" }}>CTFs &amp; Highlights</h2>
+        <h2 id="highlights-title" className="h2">CTFs &amp; Highlights</h2>
         <div className="highlights-grid">
           {items.map((entry, index) => (
             <div
@@ -254,12 +355,12 @@ export function Arsenal() {
   const visibleGroups = active === "all" ? skillGroups : skillGroups.filter((g) => g.id === active);
 
   return (
-    <section className="section arsenal-section arsenal-section--cream" id="arsenal" aria-labelledby="arsenal-title">
+    <section className="section arsenal-section" id="arsenal" aria-labelledby="arsenal-title">
       <div className="container">
         <div className="arsenal-layout">
           <div className="arsenal-col-left reveal" style={{ flex: "1 1 100%" }}>
             <div className="arsenal-label">SKILLS &amp; TOOLS</div>
-            <h2 id="arsenal-title" className="h2" style={{ color: "var(--navy)", marginBottom: "1.5rem" }}>My Arsenal</h2>
+            <h2 id="arsenal-title" className="h2" style={{ marginBottom: "1.5rem" }}>My Arsenal</h2>
 
             <div className="arsenal-filter-tabs" role="group" aria-label="Filter skills">
               <button
@@ -302,8 +403,8 @@ export function Arsenal() {
           </div>
         </div>
 
-        <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(8,32,82,.1)" }}>
-          <p className="achievement-strip-eyebrow" style={{ color: "var(--burgundy)" }}>CURRENTLY EXPLORING</p>
+        <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(248,240,229,.1)" }}>
+          <p className="achievement-strip-eyebrow" style={{ color: "#FB7185" }}>CURRENTLY EXPLORING</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: ".6rem", marginTop: "1rem" }}>
             {currentlyExploring.map((item) => (
               <span key={item} className="arsenal-chip" style={{ fontSize: ".85rem" }}>{item}</span>
@@ -322,14 +423,24 @@ export function AboutMe() {
   return (
     <section className="about-teaser" id="about" aria-labelledby="about-title">
       <div className="container about-teaser-layout">
-        <div>
-          <Image
-            src="/images/portrait.jpg"
-            alt="Portrait of Jaikiran E"
-            width={260}
-            height={320}
-            style={{ objectFit: "cover", objectPosition: "top", borderRadius: "18px", border: "1px solid rgba(248,240,229,.15)" }}
-          />
+        <div className="about-photo-frame">
+          <div className="about-photo-status">
+            <span className="about-status-dot" />
+            <span>SECURITY RESEARCHER // UNDERGRAD</span>
+          </div>
+          <div className="about-photo-inner">
+            <Image
+              src="/images/portrait.jpg"
+              alt="Portrait of Jaikiran E"
+              width={260}
+              height={320}
+              className="about-photo-img"
+            />
+            <span className="photo-bracket photo-bracket--tl" aria-hidden="true" />
+            <span className="photo-bracket photo-bracket--tr" aria-hidden="true" />
+            <span className="photo-bracket photo-bracket--bl" aria-hidden="true" />
+            <span className="photo-bracket photo-bracket--br" aria-hidden="true" />
+          </div>
         </div>
         <div className="about-teaser-body reveal">
           <p className="eyebrow eyebrow--light">ABOUT ME</p>
@@ -360,6 +471,15 @@ export function AboutMe() {
    CONTACT — static: links only, no form/API
 ════════════════════════════════════════════ */
 export function Contact() {
+  const [copied, setCopied] = useState(false);
+  const copyEmail = () => {
+    if (site.email) {
+      navigator.clipboard.writeText(site.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    }
+  };
+
   const links = [
     site.email && { label: "Email", href: `mailto:${site.email}` },
     { label: "GitHub", href: profile.github },
@@ -377,7 +497,21 @@ export function Contact() {
             <p style={{ marginTop: "1rem", maxWidth: "46ch", color: "rgba(248,240,229,.7)" }}>
               I&apos;m looking for internships and projects where security research turns into working software.
             </p>
-            <nav className="contact-links" aria-label="Contact links">
+
+            {site.email && (
+              <button
+                type="button"
+                onClick={copyEmail}
+                className="contact-copy-pill"
+                aria-label="Copy email address"
+              >
+                <span className="contact-copy-dot" />
+                <span className="contact-copy-text">{copied ? `Copied: ${site.email}` : site.email}</span>
+                <span className="contact-copy-badge">{copied ? "✓ Copied" : "Copy"}</span>
+              </button>
+            )}
+
+            <nav className="contact-links" aria-label="Contact links" style={{ marginTop: "1.25rem" }}>
               {links.map((link) => (
                 <a key={link.label} href={link.href}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
@@ -390,7 +524,7 @@ export function Contact() {
 
           <div className="contact-form-wrap glass-navy" style={{ display: "flex", flexDirection: "column", gap: "1.25rem", padding: "2.25rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: ".85rem" }}>
-              <div style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--burgundy)", display: "grid", placeItems: "center", color: "var(--cream)", flexShrink: 0 }}>
+              <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#BE123C", display: "grid", placeItems: "center", color: "#FFF", flexShrink: 0, boxShadow: "0 0 16px rgba(190, 18, 60, 0.4)" }}>
                 <Linkedin size={20} />
               </div>
               <div>

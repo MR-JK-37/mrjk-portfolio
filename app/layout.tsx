@@ -4,6 +4,7 @@ import "./globals.css";
 import { CommandPalette, CursorAura, EvidenceTracker, FloatingNav, ToastProvider } from "@/components/shell";
 import { site } from "@/lib/site";
 import { MotionRuntime } from "@/components/motion-runtime";
+import { AnimationEngine } from "@/components/animation-engine";
 
 const fraunces = localFont({ src: "./fonts/fraunces-latin-600.woff2", variable: "--font-fraunces", display: "swap", preload: true, weight: "600" });
 const uiSans = localFont({ src: [{ path: "./fonts/ui-sans-regular.ttf", weight: "400" }, { path: "./fonts/ui-sans-bold.ttf", weight: "600 900" }], variable: "--font-ui-local", display: "swap", preload: false });
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body suppressHydrationWarning>
         <a className="skip-link" href="#main">Skip to content</a>
         <ToastProvider>
+          <AnimationEngine />
           <MotionRuntime />
           <EvidenceTracker />
           <FloatingNav />

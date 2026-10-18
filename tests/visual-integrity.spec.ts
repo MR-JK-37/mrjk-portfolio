@@ -17,6 +17,11 @@ test.describe("Visual Integrity & Layout Audit", () => {
         if (msg.type() === "error") consoleErrors.push(msg.text());
       });
 
+      await page.addInitScript(() => {
+        try {
+          sessionStorage.setItem("mrjk_loader_seen", "1");
+        } catch {}
+      });
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.goto("/", { waitUntil: "domcontentloaded" });
       await page.waitForSelector(".hero-scene-svg");
@@ -46,7 +51,12 @@ test.describe("Visual Integrity & Layout Audit", () => {
       );
       expect(realErrors).toEqual([]);
 
-      // 5. Save screenshot
+      // 5. Scroll down to trigger all reveal observers, scroll back up, and save screenshot
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      await page.waitForTimeout(150);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(100);
+
       await page.screenshot({
         path: `test-results/screenshots/home-${vp.width}.png`,
         fullPage: true,
@@ -89,5 +99,17 @@ test.describe("Visual Integrity & Layout Audit", () => {
       ["serious", "critical"].includes(v.impact ?? "")
     );
     expect(criticalViolations).toEqual([]);
+  });
+
+  test("Page loader displays on fresh session and completes", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    // Fresh session without mrjk_loader_seen
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const loader = page.locator(".page-loader");
+    if (await loader.count() > 0) {
+      await expect(page.locator(".loader-brand")).toBeVisible();
+      // Wait for loader to finish and detach
+      await expect(loader).toHaveCount(0, { timeout: 3500 });
+    }
   });
 });

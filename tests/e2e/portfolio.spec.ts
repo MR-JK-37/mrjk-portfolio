@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-const pages = ["/", "/design-system", "/security", "/resume", "/work/aero", "/work/spear-ai", "/work/netpulse", "/work/lucent", "/work/journey-safety"];
+const pages = ["/", "/design-system", "/security", "/resume", "/work/we-care", "/work/netpulse", "/work/aran"];
 for (const path of pages) test(`${path} has no serious accessibility violations`, async ({ page }) => { const errors: string[] = []; page.on("console", (message) => message.type() === "error" && errors.push(message.text())); await page.goto(path); const results = await new AxeBuilder({ page }).analyze(); expect(results.violations.filter((violation) => ["serious","critical"].includes(violation.impact ?? ""))).toEqual([]); expect(errors).toEqual([]); });
 test("keyboard command palette works", async ({ page }) => { await page.goto("/"); await page.keyboard.press("Control+K"); await expect(page.getByRole("dialog", { name: "Command palette" })).toBeVisible(); await page.keyboard.press("Escape"); await expect(page.getByRole("dialog", { name: "Command palette" })).toBeHidden(); });
 for (const width of [375,768,1280,1920]) test(`homepage visual at ${width}`, async ({ page }) => { await page.setViewportSize({ width, height: width === 375 ? 812 : 900 }); await page.goto("/"); await page.screenshot({ path: `test-results/screenshots/home-${width}.png`, fullPage: true }); });

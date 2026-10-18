@@ -48,7 +48,7 @@ const NAV_LINKS = [
   { label: "Projects",   href: "/projects",    id: null },
   { label: "Security",   href: "/security",    id: null },
   { label: "Experience", href: "/experience",  id: null },
-  { label: "Blog",       href: "/#about",      id: null },
+  { label: "Resume",     href: "/resume",      id: null },
 ] as const;
 
 /* ─── FloatingNav ─── */
@@ -56,15 +56,18 @@ export function FloatingNav() {
   const pathname = usePathname();
   const [hidden,    setHidden]    = useState(false);
   const [menuOpen,  setMenuOpen]  = useState(false);
-  const [nightMode, setNightMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme");
-      if (saved) return saved === "night";
-    }
-    return true; // default night per reference
-  });
+  const [nightMode, setNightMode] = useState(true); // always night on SSR to avoid hydration mismatch
   const [active,    setActive]    = useState("");
   const lastY = useRef(0);
+
+  // Read stored theme only after mount (client-side): localStorage isn't
+  // available during SSR, so this can't be a lazy useState initializer
+  // without causing a hydration mismatch.
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (saved) setNightMode(saved === "night");
+  }, []);
 
   useEffect(() => {
     const mode = nightMode ? "night" : "day";
@@ -123,7 +126,9 @@ export function FloatingNav() {
       <header className={cn("floating-nav", hidden && "floating-nav--hidden")} role="banner">
         {/* Left pill — logo */}
         <Link href="/" className="nav-brand" aria-label="MR!JK! home">
-          <span>MR!JK!</span>
+          <span>
+            MR<span className="nav-brand-exclaim">!</span>JK<span className="nav-brand-exclaim">!</span>
+          </span>
         </Link>
 
         {/* Center — nav links */}
@@ -150,8 +155,17 @@ export function FloatingNav() {
           })}
         </nav>
 
-        {/* Right — theme + CTA */}
+        {/* Right — theme + search + CTA */}
         <div className="nav-actions">
+          <button
+            className="nav-search-btn"
+            type="button"
+            aria-label="Search or press Ctrl+K"
+            onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }))}
+          >
+            <Search size={16} />
+          </button>
+
           <button
             className="nav-theme-btn"
             type="button"
